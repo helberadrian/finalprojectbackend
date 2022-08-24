@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import crypto from "crypto-js";
+import { SECRET } from "../config/config.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,11 +14,9 @@ const userSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      unique: true,
     },
     lastname: {
       type: String,
-      unique: true,
     },
     phone: {
       type: Number,
@@ -25,18 +24,10 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      unique: true,
     },
     role: {
       type: String,
-      unique: true,
     },
-    cart: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart",
-      },
-    ],
   },
   {
     timestamps: true,
@@ -45,22 +36,14 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.statics.encryptPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(password, salt);
+  const pass = crypto.AES.encrypt(password, SECRET).toString();
+  return await pass;
 };
 
-userSchema.statics.comparePassword = async (password, receivedPassword) => {
-  return await bcrypt.compare(password, receivedPassword)
-}
-
-userSchema.pre("save", async function (next) {
-  const user = this;
-  if (!user.isModified("password")) {
-    return next();
-  }
-  const hash = await bcrypt.hash(user.password, 10);
-  user.password = hash;
-  next();
-})
+userSchema.statics.decryptPassword = async (password) => {
+  const data = crypto.AES.decrypt(password, SECRET);
+  const pass = data.toString(crypto.enc.Utf8);
+  return await pass;
+};
 
 export default mongoose.model("User", userSchema);

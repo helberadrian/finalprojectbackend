@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import logger from "../config/logger.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -35,7 +36,7 @@ export const createUser = async (req, res) => {
       role: savedUser.role,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 };
 
@@ -74,7 +75,7 @@ export const createUserAdmin = async (req, res) => {
       role: savedUser.role,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 };
 

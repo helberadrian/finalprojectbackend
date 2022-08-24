@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 
-const cartSchema = new mongoose.Schema(
-  {
-    product_id: {
-      type: String,
-      required: true,
-      trim: true,
-    }
+const cartSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    unique: true,
+  },
+  productId: [],
   },
   {
     timestamps: true,

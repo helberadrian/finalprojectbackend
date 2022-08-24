@@ -27,13 +27,9 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/registro", [checkExistingUser], createUser);
+router.post("/users", [checkExistingUser], createUser);
 
-router.post("/registro/admin", [verifyToken, isAdmin, checkExistingUser], createUserAdmin);
-
-//router.post("/registro/admin", [verifyToken, isAdmin, checkExistingUser], createUserAdmin);
-
-//router.post("/signup", [checkExistingUser, checkExistingRole], signupHandler);
+router.post("/users/admin", [verifyToken, isAdmin, checkExistingUser], createUserAdmin);
 
 router.post("/login", signinHandler);
 

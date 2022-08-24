@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+import logger from "../config/logger.js";
 
 export const createProduct = async (req, res) => {
   const { name, description, price, imgURL } = req.body;
@@ -15,7 +16,7 @@ export const createProduct = async (req, res) => {
 
     res.status(201).json(productSaved);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return res.status(500).json(error);
   }
 };
@@ -40,7 +41,7 @@ export const updateProductById = async (req, res) => {
       new: true,
     }
   );
-  res.status(204).json(updatedProduct);
+  res.status(200).json(updatedProduct);
 };
 
 export const deleteProductById = async (req, res) => {

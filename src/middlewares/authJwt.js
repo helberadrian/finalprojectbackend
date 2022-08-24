@@ -3,10 +3,10 @@ import { SECRET } from "../config/config.js";
 import User from "../models/user.js";
 
 export const verifyToken = async (req, res, next) => {
-  let token = req.headers["x-access-token"];
-
-  if (!token) return res.status(403).json({ message: "No token provided" });
-
+  let authHeader = req.headers["authorization"] || req.headers["Authorization"];
+  if (!authHeader) return res.status(403).json({ message: "No token provided" });
+  
+  const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, SECRET);
     req.userId = decoded.id;
@@ -20,24 +20,11 @@ export const verifyToken = async (req, res, next) => {
   }
 };
 
-export const isModerator = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.userId);
-      if (user.roles === "moderator") {
-        next();
-        return;
-      } else {
-        return res.status(403).json({ message: "Require Moderator Role!" });
-      }
-  } catch (error) {
-    return res.status(500).send({ message: error });
-  }
-};
-
 export const isAdmin = async (req, res, next) => {
     try {
-      const user = await User.findById(req.userId);
-        if (user.roles === "admin") {
+      const user = req.userId;
+      const userAdmin = await User.findById(user);
+        if (userAdmin.role === "admin") {
           next();
           return;
         } else {
