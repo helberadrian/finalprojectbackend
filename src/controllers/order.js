@@ -34,7 +34,7 @@ export const createOrder = async (req, res) => {
                 cart: productsBuyOrder
             })
             const orderSaved = await order.save();
-            buyOrderMail(order);
+            const mailSend = await buyOrderMail(order);
             res.status(201).json(orderSaved);
         }
     }

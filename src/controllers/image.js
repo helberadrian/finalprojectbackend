@@ -1,11 +1,11 @@
-import multer from './multer';
+import logger from "../config/logger.js"
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '../static')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname)
+export default async function uploadImg (req, res) {
+    try {
+        logger.info({imagen: req.file.filename})
+        res.status(201).json({imagen: req.file.filename})
+    } catch (error) {
+        logger.error(error)
+        res.status(400).json({Error: error.message})
     }
-})
-const upload = multer({ image: storage })
+}

@@ -1,6 +1,7 @@
 
 export function template(order){
-    const template = ''
+    let template = `<h1 style="color: blue;">Nueva Compra</h1>
+    <p>Hemos registrado la compra de los siguientes productos:</p>`
     
     for (const product of order.cart) {
         const text = `<ul>
